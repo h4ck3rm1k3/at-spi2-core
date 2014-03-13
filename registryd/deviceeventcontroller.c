@@ -25,9 +25,9 @@
 
 #include <config.h>
 
-#undef  SPI_XKB_DEBUG
-#undef  SPI_DEBUG
-#undef  SPI_KEYEVENT_DEBUG
+#define  SPI_XKB_DEBUG 1
+#define  SPI_DEBUG 1
+#define  SPI_KEYEVENT_DEBUG 1
 
 #include <string.h>
 #include <ctype.h>
@@ -1054,7 +1054,7 @@ spi_controller_notify_mouselisteners (SpiDEController                 *controlle
 
 static gboolean
 key_set_contains_key (GSList                          *key_set,
-			  const Accessibility_DeviceEvent *key_event)
+                      const Accessibility_DeviceEvent *key_event)
 {
   gint i;
   gint len;
@@ -1063,7 +1063,7 @@ key_set_contains_key (GSList                          *key_set,
   if (!key_set)
     {
 #ifdef SPI_DEBUG
-      g_print ("null key set!\n");
+      g_print ("null key set!\n");      
 #endif
       return TRUE;
     }
@@ -1793,10 +1793,18 @@ impl_notify_listeners_sync (DBusConnection *bus, DBusMessage *message, void *use
   {
     return invalid_arguments_error (message);
   }
+
 #ifdef SPI_DEBUG
   g_print ("notifylistening listeners synchronously: controller %p, event id %d\n",
 	   controller, (int) event.id);
+
+  g_print ("key_event %d, code %d, string %s\n",
+           (int) event.id,
+           (int) event.hw_code,
+           event.event_string);      
+
 #endif
+
   ret = spi_controller_notify_keylisteners (controller,
 					     (Accessibility_DeviceEvent *) 
 					     &event, FALSE) ?
@@ -1823,6 +1831,11 @@ impl_notify_listeners_async (DBusConnection *bus, DBusMessage *message, void *us
 #ifdef SPI_DEBUG
   g_print ("notifylistening listeners asynchronously: controller %p, event id %d\n",
 	   controller, (int) event.id);
+  g_print ("key_event %d, code %d, string %s\n",
+           (int) event.id,
+           (int) event.hw_code,
+           event.event_string);      
+
 #endif
   spi_controller_notify_keylisteners (controller, (Accessibility_DeviceEvent *)
 				      &event, FALSE); 
@@ -1912,6 +1925,13 @@ handle_dec_method_from_idle (DBusConnection *bus, DBusMessage *message, void *us
   const gchar *member  = dbus_message_get_member (message);
   DBusHandlerResult result = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
   DBusMessage *reply = NULL;
+
+#ifdef SPI_XKB_DEBUG
+  const char *dest = dbus_message_get_destination (message);
+  const char *sig = dbus_message_get_signature (message);
+
+  g_print ("msg %x, dest %s, sig %s, iface %s, member %s\n",message, dest, sig, iface, member);
+#endif
 
   if (!strcmp (iface, SPI_DBUS_INTERFACE_DEC))
     {

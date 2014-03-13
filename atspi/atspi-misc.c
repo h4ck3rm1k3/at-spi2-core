@@ -28,6 +28,8 @@
  *
  */
 
+#define DEBUG_REF_COUNTS 1
+
 #include "atspi-private.h"
 #ifdef HAVE_X11
 #include "X11/Xlib.h"
@@ -1636,6 +1638,7 @@ atspi_set_main_context (GMainContext *cnx)
   atspi_main_context = cnx;
   atspi_dbus_connection_setup_with_g_main (atspi_get_a11y_bus (), cnx);
 }
+
 
 #ifdef DEBUG_REF_COUNTS
 static void

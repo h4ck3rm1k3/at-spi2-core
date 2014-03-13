@@ -25,9 +25,9 @@
 
 #include <config.h>
 
-#undef  SPI_XKB_DEBUG
-#undef  SPI_DEBUG
-#undef  SPI_KEYEVENT_DEBUG
+#define  SPI_XKB_DEBUG 1
+#define  SPI_DEBUG 1
+#define  SPI_KEYEVENT_DEBUG 1
 
 #include <string.h>
 #include <ctype.h>

@@ -26,6 +26,8 @@
 #include "atspi-accessible-private.h"
 #include <string.h>
 
+#define DEBUG_REF_COUNTS 1
+
 static gboolean enable_caching = FALSE;
 static guint quark_locale;
 

@@ -25,7 +25,7 @@
 #include "dbind-config.h"
 #include "dbind-any.h"
 
-#undef DEBUG
+#define DEBUG 1
 
 /*  Align a value upward to a boundary, expressed as a number of bytes.
  *  E.g. align to an 8-byte boundary with argument of 8.
